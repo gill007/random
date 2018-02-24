@@ -1,0 +1,68 @@
+
+String fromNetwork;
+void setup() 
+{
+Serial.begin(115200);
+Serial.println("AT+CIPMUX=1");
+delay(10);
+Serial.println("AT+CIPSERVER=1,1883");
+
+pinMode(12,OUTPUT);
+digitalWrite(12,LOW);
+pinMode(11,OUTPUT);
+digitalWrite(11,LOW);
+pinMode(13,OUTPUT);
+digitalWrite(13,LOW);
+pinMode(10,OUTPUT);
+digitalWrite(10,LOW);
+pinMode(9,OUTPUT);
+digitalWrite(9,LOW);
+pinMode(5,OUTPUT);
+digitalWrite(5,LOW);
+}
+
+void loop() 
+{ 
+  if(Serial.available())
+  {
+    fromNetwork.concat((char)Serial.read());
+    if(fromNetwork.indexOf("CONNECT")>-1)
+    {
+      Serial.println("AT+CIPSEND=0,1116");//-116-24
+      delay(50);
+Serial.println("<html><title>ESP8266 Control</title><STYLE>H1,h2,div{TEXT-ALIGN:CENTER;}button{padding:16px 32px;margin: 4px 2px;}");
+Serial.println("</STYLE><body><form method='GET'><H1>HOME AUTOMATION</H1><h2>LIVING ROOM</h2><div><button type='submit' name='b' value='BULB ON'>BULB ON</button><button class='center' name='b' type='submit' value='BULB OFF'>BULB OFF</button><br/><button type='submit' name='c' value='FAN ON'>FAN ON</button>");
+Serial.println("<button type='submit' name='c' value='FAN OFF'>FAN OFF</button></div><h2>BEDROOM</h2><div><button type='submit' name='d' value='HEATER ON'>BULB ON</button><button type='submit' name='d' value='HEATER OFF'>BULB OFF</button><br/>");
+Serial.println("<button type='submit' name='e' value='LIGHT ON'>FAN ON</button><button type='submit' name='e' value='LIGHT OFF'>FAN OFF</button></div><h2>KITCHEN</h2><div><button type='submit' name='f' value='CFL ON'>BULB ON</button>");
+Serial.println("<button type='submit' name='f' value='CFL OFF'>BULB OFF</button><br/></div><h2>WASHROOM</h2><div><button type='submit' name='g' value='MIC ON'>BULB ON</button><button type='submit' name='g' value='MIC OFF'>BULB OFF</button><br/></div>");
+Serial.println("</form></body></html>");
+fromNetwork="";}
+      
+  else if(fromNetwork.indexOf("BULB+ON")>-1)
+     digitalWrite(12,HIGH);
+  else if(fromNetwork.indexOf("BULB+OFF")>-1)
+       digitalWrite(12,LOW);
+   else if(fromNetwork.indexOf("FAN+ON")>-1)
+     digitalWrite(11,HIGH);
+  else if(fromNetwork.indexOf("FAN+OFF")>-1)
+       digitalWrite(11,LOW);
+  else if(fromNetwork.indexOf("HEATER+ON")>-1)
+       digitalWrite(13,HIGH);
+  else if(fromNetwork.indexOf("HEATER+OFF")>-1)
+       digitalWrite(13,LOW);
+  else if(fromNetwork.indexOf("LIGHT+ON")>-1)
+     digitalWrite(10,HIGH);
+  else if(fromNetwork.indexOf("LIGHT+OFF")>-1)
+       digitalWrite(10,LOW);
+  else if(fromNetwork.indexOf("CFL+ON")>-1)
+     digitalWrite(9,HIGH);
+  else if(fromNetwork.indexOf("CFL+OFF")>-1)
+       digitalWrite(9,LOW);
+  else if(fromNetwork.indexOf("MIC+ON")>-1)
+     digitalWrite(5,HIGH);
+  else if(fromNetwork.indexOf("MIC+OFF")>-1)
+       digitalWrite(5,LOW);
+ }
+}
+
+ 
